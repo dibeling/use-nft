@@ -69,3 +69,25 @@ export async function fetchStandardNftContractData(
     owner,
   }
 }
+
+export async function test1(
+      contractAddress: Address,
+      tokenId: string,
+      config: EthersFetcherConfigEthersLoaded,
+      fetchContext: FetchContext
+    ): Promise<{}> {
+      const contract = new config.ethers.Contract(
+        contractAddress,
+        ABI,
+        config.provider
+      ) as NftContract
+    
+      const [metadataUrl, owner] = await Promise.all([
+        url(contract, tokenId, fetchContext),
+        contract.ownerOf(tokenId).catch(() => ""),
+      ])
+    
+      return {
+        metadataUrl,
+      }
+    }
